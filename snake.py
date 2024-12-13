@@ -28,8 +28,51 @@ class Snake:
         self.body_br = pygame.image.load("graphics/body_br.png").convert_alpha()
         self.body_bl = pygame.image.load("graphics/body_bl.png").convert_alpha()
     
-    # def draw_snake(self):
-    #     for index, block in enumerate(self.body):
+    def draw_snake(self):
+        self.update_head_graphics()
+        self.update_tail_graphics()
+        for index, block in enumerate(self.body):
+            # 1. Rect for positioning
+            x_pos = block.x * cell_size
+            y_pos = block.y * cell_size
+            block_rect = pygame.Rect(x_pos, y_pos, cell_size, cell_size)
+
+            # 2. What direction is head facing
+            if index == 0:
+                screen.blit(self.head, block_rect)
+            elif index == len(self.body) - 1:
+                screen.blit(self.tail, block_rect)
+            else:
+                previous_block = self.body[index + 1] - block
+                next_block = self.body[index - 1] - block
+                if previous_block.x == next_block.x:
+                    screen.blit(self.body_vertical, block_rect)
+                elif previous_block.y == next_block.y:
+                    screen.blit(self.body_horizontal, block_rect)
+                elif previous_block.x == -1 and next_block.y == 1 or (previous_block.y == 1 and next_block.x == -1) :
+                    screen.blit(self.body_bl, block_rect)
+                elif previous_block.x == -1 and next_block.y == -1 or (previous_block. y == -1 and next_block.x == -1):
+                    screen.blit(self.body_tl, block_rect)
+                elif previous_block.y == 1 and next_block.x == 1 or (previous_block.x == 1 and next_block.y == 1):
+                    screen.blit(self.body_br, block_rect)
+                elif previous_block.x == 1 and next_block.y == -1 or (previous_block.y == -1 and next_block.x == 1):
+                    screen.blit(self.body_tr, block_rect)         
+
+    def update_head_graphics(self):
+        relative_head_direction = self.body[1] - self.body[0]
+        if relative_head_direction == Vector2(1, 0): self.head = self.head_left
+        elif relative_head_direction == Vector2(-1, 0): self.head = self.head_right
+        elif relative_head_direction == Vector2(0, 1): self.head = self.head_up
+        elif relative_head_direction == Vector2(0, -1): self.head = self.head_down
+    
+    def update_tail_graphics(self):
+        relative_tail_direction = self.body[-2] - self.body[-1]
+        if relative_tail_direction == Vector2(1, 0): self.tail = self.tail_left
+        elif relative_tail_direction == Vector2(-1, 0): self.tail = self.tail_right
+        elif relative_tail_direction == Vector2(0, 1): self.tail = self.tail_up
+        elif relative_tail_direction == Vector2(0, -1): self.tail = self.tail_down
+
+         
     
     def move_snake(self):
         if self.new_block == True:
