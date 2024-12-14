@@ -51,9 +51,9 @@ class Snake:
                     screen.blit(self.body_horizontal, block_rect)
                 elif previous_block.x == -1 and next_block.y == 1 or (previous_block.y == 1 and next_block.x == -1) :
                     screen.blit(self.body_bl, block_rect)
-                elif previous_block.x == -1 and next_block.y == -1 or (previous_block. y == -1 and next_block.x == -1):
+                elif previous_block.x == -1 and next_block.y == -1 or (previous_block.y == -1 and next_block.x == -1):
                     screen.blit(self.body_tl, block_rect)
-                elif previous_block.y == 1 and next_block.x == 1 or (previous_block.x == 1 and next_block.y == 1):
+                elif previous_block.x == 1 and next_block.y == 1 or (previous_block.y == 1 and next_block.x == 1):
                     screen.blit(self.body_br, block_rect)
                 elif previous_block.x == 1 and next_block.y == -1 or (previous_block.y == -1 and next_block.x == 1):
                     screen.blit(self.body_tr, block_rect)         
@@ -118,6 +118,7 @@ class Main:
         self.check_fail()
     
     def draw_elements(self):
+        self.draw_grass()
         self.snake.draw_snake()
         self.fruit.draw_fruit()
 
@@ -137,6 +138,21 @@ class Main:
     def game_over(self):
         pygame.quit()
         sys.exit()
+
+    def draw_grass(self):
+        grass_colour = (167, 209, 61)
+        for row in range(cell_number):
+            if row % 2 == 0:
+                for col in range(cell_number):
+                    if col % 2 == 0:
+                        grass_rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                        pygame.draw.rect(screen, grass_colour, grass_rect)
+            else:
+                for col in range(cell_number):
+                    if col % 2 == 1:
+                        grass_rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                        pygame.draw.rect(screen, grass_colour, grass_rect)
+          
 
 pygame.init()
 cell_size = 40
